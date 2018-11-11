@@ -7,9 +7,6 @@ omit =
     # Don't test the tests
     */tests/*
 
-    # The brackground services cannot be tested automatically, should be tested manualy
-    */background.py
-
 
 [report]
 # Regexes for lines to exclude from consideration

@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from time import time
 from flask_mail import Mail, Message
 from monolith.database import db, User, Run, Report
-from flask_login import current_user
 
 BACKEND = BROKER = 'redis://localhost:6379'
 celery = Celery(__name__, backend=BACKEND, broker=BROKER)
@@ -13,14 +12,14 @@ _APP = None
 
 
 @celery.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(100000.0, fetch_all_runs)
+def setup_periodic_tasks(sender, **kwargs):  # pragma: no cover
+    sender.add_periodic_task(30.0, fetch_all_runs)
 
-    sender.add_periodic_task(1.0, send_all_mail)
+    sender.add_periodic_task(30.0, send_all_mail)
 
 
 @celery.task
-def fetch_all_runs():
+def fetch_all_runs():  # pragma: no cover
     global _APP
     # lazy init
     if _APP is None:
@@ -78,7 +77,7 @@ def fetch_runs(user):
 
 
 @celery.task
-def send_all_mail():
+def send_all_mail():  # pragma: no cover
     print('sending')
     global _APP
     # lazy init
@@ -113,6 +112,7 @@ def prepare_body(user, app):
     if runs.count() == 0:
         return None
     for run in runs.all():
-        body += "name: " + run.name + "\n" + "distance: " + str(run.distance) + "\n" + "start_date: " + str(run.start_date) + "\n" + "average_speed: " + str(run.average_speed) + "\n"
+        body += "name: " + run.name + "\n" + "distance: " + str(run.distance) + "\n" + "start_date: " + \
+                str(run.start_date) + "\n" + "average_speed: " + str(run.average_speed) + "\n"
         body += "elapsed_time: " + str(run.elapsed_time) + "\n" + "average_heartrate: " + str(run.average_heartrate) + "\n" + "total_elevation_gain: " + str(run.total_elevation_gain)+ "\n\n\n"
     return body

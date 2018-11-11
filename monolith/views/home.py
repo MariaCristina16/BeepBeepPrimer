@@ -26,6 +26,7 @@ def index():
     if hasattr(current_user, 'is_authenticated') and current_user.is_authenticated:
         runs = db.session.query(Run).filter(Run.runner_id == current_user.id)
         total_average_speed = 0
+        print(current_user.strava_token)
         for run in runs:
             total_average_speed += run.average_speed
             print(run.name)
@@ -35,6 +36,6 @@ def index():
     else:
         runs = None
         total_average_speed = 0
-    strava_auth_url = _strava_auth_url(home.app.config)
+    strava_auth_url_ = strava_auth_url(home.app.config)
     return render_template("index.html", runs=runs,
-                           strava_auth_url=strava_auth_url, total_average_speed=total_average_speed)
+                           strava_auth_url=strava_auth_url_, total_average_speed=total_average_speed)

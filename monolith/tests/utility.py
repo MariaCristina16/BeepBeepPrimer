@@ -70,7 +70,7 @@ def create_user(client, email='marco@prova.it', firstname='marco', lastname='mar
                                                  vo2max=vo2max), follow_redirects=True)
 
 
-def new_user():
+def new_user(strava_token=None):
     user = User()
     user.email = 'test@example.com'
     user.firstname = "A"
@@ -82,8 +82,11 @@ def new_user():
     user.rest_hr = 0
     user.vo2max = 0
     user.set_password('test')
+    if strava_token is not None:
+        user.strava_token = strava_token
     db.session.add(user)
     db.session.commit()
+    return user
 
 
 def new_report(user, timestamp, choice_time):

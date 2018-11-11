@@ -29,7 +29,7 @@ def test_login(client):
     assert reply.status_code == 403
 
 
-def test_login(client):
+def test_logout(client):
     tested_app, app = client
 
     # logout without log in
