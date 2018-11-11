@@ -36,6 +36,8 @@ def create_user():
             else:
                 flash('Already existing user', category='error')
                 return make_response(render_template('create_user.html', form=form), 409)
+        else:
+            abort(400)
 
     return render_template('create_user.html', form=form)
 
@@ -69,5 +71,6 @@ def delete_user():
             else:
                 flash("Incorrect password", category='error')
                 return make_response(render_template("delete_user.html", form=form), 401)
-
+        else:
+            abort(400)
     return render_template("delete_user.html", form=form)
