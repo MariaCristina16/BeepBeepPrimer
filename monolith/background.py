@@ -1,12 +1,10 @@
 from celery import Celery
-#IMPORT SETTING FOR FETCH
 from stravalib import Client
-# IMPORT SETTING FOR MAIL
-from datetime import time, datetime, timedelta
+from datetime import datetime, timedelta
+from time import time
 from flask_mail import Mail, Message
-
-#IMPORT SETTING FOR BOTH FETCH AND MAIL
 from monolith.database import db, User, Run, Report
+from flask_login import current_user
 
 BACKEND = BROKER = 'redis://localhost:6379'
 celery = Celery(__name__, backend=BACKEND, broker=BROKER)
@@ -16,9 +14,9 @@ _APP = None
 
 @celery.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(10.0, fetch_all_runs)
+    sender.add_periodic_task(100000.0, fetch_all_runs)
 
-    sender.add_periodic_task(30.0, send_all_mail)
+    sender.add_periodic_task(1.0, send_all_mail)
 
 
 @celery.task
@@ -78,7 +76,7 @@ def fetch_runs(user):
     db.session.commit()
     return runs
 
-#CELERY TASK FOR MAIL
+
 @celery.task
 def send_all_mail():
     print('sending')
@@ -95,22 +93,26 @@ def send_all_mail():
     with app.app_context():
         users = db.session.query(User).filter()
         for user in users:
-            mail = db.session.query(Mail).filter(Mail.id == user.id)
-            if time.time() - mail.timestamp >= mail.choice_time:        #check of the choice of the user
-                body = prepare_body(user,mail.choice_time)
+            report = db.session.query(Report).filter(Report.runner_id == user.id).first()
+            if report is not None and time() - report.timestamp >= report.choice_time:
+                body = prepare_body(user, app)
+
                 if body:
                     msg = Message('Your BeepBeep Report', sender=app.config['MAIL_USERNAME'], recipients=[user.email])
                     msg.body = body
                     mail.send(msg)
+                    report.set_timestamp()
+                    db.session.merge(report)
+                    db.session.commit()
 
 
-def prepare_body(user,choice_time):
+def prepare_body(user, app):
     body = ""
     with app.app_context():
-        runs = db.session.query(Run).filter(Run.runner == user, Run.start_date >= (datetime.now() - timedelta(hour=choice_time)))
+        runs = db.session.query(Run).filter(Run.runner_id == user.id)
     if runs.count() == 0:
         return None
-    for run in runs:
+    for run in runs.all():
         body += "name: " + run.name + "\n" + "distance: " + str(run.distance) + "\n" + "start_date: " + str(run.start_date) + "\n" + "average_speed: " + str(run.average_speed) + "\n"
         body += "elapsed_time: " + str(run.elapsed_time) + "\n" + "average_heartrate: " + str(run.average_heartrate) + "\n" + "total_elevation_gain: " + str(run.total_elevation_gain)+ "\n\n\n"
     return body

@@ -1,5 +1,5 @@
-from monolith.tests.utility import client, login, create_user, logout, new_predefined_run
-from monolith.database import db, User, Run
+from monolith.tests.utility import client, login, create_user, logout, new_predefined_run, new_objective
+from monolith.database import db, User, Run, Objective, Report
 
 
 def test_delete(client):
@@ -25,6 +25,8 @@ def test_delete(client):
         user = db.session.query(User).filter(User.email == 'marco@prova.it').first()
         new_predefined_run(user)
         assert db.session.query(Run).filter(Run.runner_id == user.id).first() is not None
+        new_objective(user)
+        assert db.session.query(Objective).filter(Objective.runner_id == user.id).first() is not None
 
     # retrieve delete_user page
     reply = tested_app.get('/delete_user')
@@ -40,10 +42,7 @@ def test_delete(client):
 
     with app.app_context():
         assert db.session.query(Run).filter(Run.runner_id == user.id).first() is None
-
-    with app.app_context():
-        users = db.session.query(User).filter(User.email == 'marco@prova.it')
-    assert users.first() is None
-
+        assert db.session.query(User).filter(User.email == 'marco@prova.it').first() is None
+        assert db.session.query(Objective).filter(Objective.runner_id == user.id).first() is None
 
 

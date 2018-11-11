@@ -15,7 +15,6 @@ def create_app():
     app.config['STRAVA_CLIENT_SECRET'] = os.environ['STRAVA_CLIENT_SECRET']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///beepbeep.db'
 
-
     # Mail
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 465

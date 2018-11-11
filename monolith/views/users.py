@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, flash, make_response, url_for, abort
 from flask_login import login_required, current_user, logout_user
-from monolith.database import db, User, Run
+from monolith.database import db, User, Run, Objective, Report
 from monolith.auth import admin_required
 from monolith.forms import UserForm, DeleteForm
 
@@ -49,9 +49,17 @@ def delete_user():
         if form.validate_on_submit():
             if current_user.authenticate(form.password.data) and hasattr(current_user, 'id'):
                 runs = db.session.query(Run).filter(Run.runner_id == current_user.id)
+                objectives = db.session.query(Objective).filter(Objective.runner_id == current_user.id)
+                reports = db.session.query(Report).filter(Report.runner_id == current_user.id)
 
                 for run in runs.all():
                     db.session.delete(run)
+
+                for report in reports.all():
+                    db.session.delete(report)
+
+                for objective in objectives.all():
+                    db.session.delete(objective)
 
                 db.session.delete(current_user)
                 db.session.commit()

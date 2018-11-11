@@ -28,6 +28,7 @@ def index():
         total_average_speed = 0
         for run in runs:
             total_average_speed += run.average_speed
+            print(run.name)
         if runs.count():
             total_average_speed /= runs.count()
         total_average_speed = round(total_average_speed, 2)

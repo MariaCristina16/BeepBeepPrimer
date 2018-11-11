@@ -32,25 +32,25 @@ def test_create_repo(client):
 
         reply = tested_app.post('/settingreport', data=dict(setting_mail='6'), follow_redirects=True)
         assert reply.status_code == 200
-        mail = db.session.query(Report).filter(Report.id_user == user.id).first()
+        mail = db.session.query(Report).filter(Report.runner_id == user.id).first()
         assert mail is not None
-        assert mail.id_user == user.id
+        assert mail.runner_id == user.id
         assert mail.choice_time == 21600.0
 
 
         reply = tested_app.post('/settingreport', data=dict(setting_mail='12'), follow_redirects=True)
         assert reply.status_code == 200
-        mail = db.session.query(Report).filter(Report.id_user == user.id).first()
+        mail = db.session.query(Report).filter(Report.runner_id == user.id).first()
         assert mail is not None
-        assert mail.id_user == user.id
+        assert mail.runner_id == user.id
         assert mail.choice_time == 43200.0
 
 
         reply = tested_app.post('/settingreport', data=dict(setting_mail='24'), follow_redirects=True)
         assert reply.status_code == 200
-        mail = db.session.query(Report).filter(Report.id_user == user.id).first()
+        mail = db.session.query(Report).filter(Report.runner_id == user.id).first()
         assert mail is not None
-        assert mail.id_user == user.id
+        assert mail.runner_id == user.id
         assert mail.choice_time == 86400.0
 
 
