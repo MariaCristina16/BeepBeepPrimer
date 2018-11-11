@@ -5,7 +5,7 @@ from random import uniform, randint
 from datetime import datetime
 
 from monolith.app import create_app
-from monolith.database import db, Run, User, Objective
+from monolith.database import db, Run, User, Objective, Report
 
 
 # read in SQL for populating test data
@@ -84,6 +84,16 @@ def new_user():
     user.set_password('test')
     db.session.add(user)
     db.session.commit()
+
+
+def new_report(user, timestamp, choice_time):
+    rep = Report()
+    rep.runner_id = user.id
+    rep.timestamp = timestamp
+    rep.choice_time = choice_time
+    db.session.add(rep)
+    db.session.commit()
+    return
 
 
 def new_run(user, strava_id=randint(100, 100000000), name=None, distance=uniform(50.0, 10000.0), elapsed_time=uniform(30.0, 3600.0),
