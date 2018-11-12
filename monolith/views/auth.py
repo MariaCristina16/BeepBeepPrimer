@@ -11,7 +11,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/strava_auth')
 @login_required
-def _strava_auth():
+def _strava_auth():  # pragma: no cover
     code = request.args.get('code')
     client = Client()
     xc = client.exchange_code_for_token

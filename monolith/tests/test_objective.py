@@ -3,6 +3,7 @@ from monolith.database import db, User, Objective
 from datetime import datetime, timedelta
 from monolith.tests.id_parser import get_element_by_id
 
+
 def test_create_objective(client):
     tested_app, app = client
 

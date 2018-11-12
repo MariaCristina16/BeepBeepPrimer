@@ -2,7 +2,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from time import time
+
 
 db = SQLAlchemy()
 
@@ -80,22 +81,25 @@ class Objective(db.Model):
 
         return min(round(100 * (sum([run.distance for run in runs]) / (self.target_distance)), 2), 100)
 
+
 # Database for the report (mail)
 # I change the name Mail because there was a conflict in background.py
 class Report(db.Model):
-    __tablename__ = 'mail'
+    __tablename__ = 'report'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = relationship('User', foreign_keys='Report.id_user')
-    timestamp = db.Column(db.DateTime)
+    runner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    runner = relationship('User', foreign_keys='Report.runner_id')
+    timestamp = db.Column(db.Float)
     choice_time = db.Column(db.Float)
 
-    def set_user(self,id_usr):
-        self.id_user = id_usr
+    def set_user(self, id_usr):
+        self.runner_id = id_usr
 
+    # timestamp from previous report, in seconds
     def set_timestamp(self):
-        self.timestamp = datetime.now()
+        self.timestamp = time()
 
+    # decision stored in seconds
     def set_decision(self,choice):
         self.choice_time = (float(choice)*3600.0)
 
