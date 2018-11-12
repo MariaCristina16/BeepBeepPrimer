@@ -2,9 +2,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta
 from time import time
-import math
+
 
 db = SQLAlchemy()
 
