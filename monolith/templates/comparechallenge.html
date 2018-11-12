@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <title>Yellow Beep Beep</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/floating-labels.css') }}">
+  <link rel="shortcut icon" href="#" />
+  </head>
+<body>
+    {% if current_user.is_authenticated %}
+    <div class="container-fluid">
+         <ul class="nav nav-pills nav-stacked" role="tablist">
+          <h2>Beep Beep</h2>
+          <li><a href="/">Home</a></li>
+          <li><a href="/create_objective">Create Objective</a></li>
+          <li><a href="/objectives">List Objectives</a></li>
+          <li><a href="/create_challenge">Create Challenge</a></li>
+          <li class="active"><a href="/challenge/<id>">Compare Challenge</a></li>
+          <li><a href="/challenge">Challenges</a></li>
+          <li><a href="/statistics">Statistics</a></li>
+          <li><a href="/settingreport">Setting Report</a></li>
+          {% if current_user.is_admin %}
+          <li><a href="/users"><span class="glyphicon glyphicon-user"></span>Users list</a></li>
+          {% endif %}
+          <li><a href="/delete_user"><span class="glyphicon glyphicon-user"></span>Delete User</a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1 class="titlepage">Challenge runs</h1>
+        <table>
+            <tr><td></td><td class="value"><p>{{ run_one.id }} {{ name_run_one }}</p></td><td class="value">{{ run_two.id }} {{ name_run_two }}</td></tr>
+            <tr><td class="key">Distance: </td><td class="value"><p>{{ run_one.distance }}</p></td><td class="value">{{run_two.distance }}</td></tr>
+            <tr><td class="key">Elapsed_time: </td><td class="value"><p>{{ run_one.elapsed_time }}</p><td class="value">{{ run_two.elapsed_time }}</td></tr>
+            <tr><td class="key">Avg_speed: </td><td class="value"><p>{{ run_one.average_speed }}</p>m/s</td><td class="value">{{ run_two.average_speed }}</td></tr>
+        </table><br>
+             <p>{{ win_avg_speed }}</p><br>
+             <p>{{ win_distance }}</p><br>
+             <p>{{ win_time }}</p><br>
+    </div>
+    {% endif %}
+</body>
+</html>

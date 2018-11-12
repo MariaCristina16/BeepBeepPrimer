@@ -31,7 +31,7 @@ def create_objective():
 
             db.session.add(new_objective)
             db.session.commit()
-            return redirect('http://127.0.0.1:5000/objectives'), status
+            return redirect('/objectives'), status
         else:
             # Bad data were sent
             status = 400

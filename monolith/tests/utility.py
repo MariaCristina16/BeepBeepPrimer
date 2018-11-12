@@ -133,6 +133,35 @@ def new_predefined_run(user):
     db.session.commit()
     return run
 
+def new_predefined_run_equal(user):
+    run = Run()
+    run.runner = user
+    run.strava_id = 10  # a random number 100 - 1.000.000, we hope is unique
+    run.name = "Run " + str(run.strava_id)
+    run.distance = 50000.0  # 50m - 10 km
+    run.elapsed_time = 4000.0  # 30s - 1h
+    run.average_speed = run.distance / run.elapsed_time
+    run.average_heartrate = None
+    run.total_elevation_gain = 3.0  # 0m - 25m
+    run.start_date = datetime.now()
+    db.session.add(run)
+    db.session.commit()
+    return run
+
+def new_predefined_run_test(user):
+    run = Run()
+    run.runner = user
+    run.strava_id = 10  # a random number 100 - 1.000.000, we hope is unique
+    run.name = "Run " + str(run.strava_id)
+    run.distance = 20000.0  # 50m - 10 km
+    run.elapsed_time = 200.0  # 30s - 1h
+    run.average_speed = run.distance / run.elapsed_time
+    run.average_heartrate = None
+    run.total_elevation_gain = 3.0  # 0m - 25m
+    run.start_date = datetime.now()
+    db.session.add(run)
+    db.session.commit()
+    return run
 
 def new_objective(user, name = "Test Objective", target_distance = "42", start_date = datetime.now(), end_date = datetime.now()):
     objective = Objective()

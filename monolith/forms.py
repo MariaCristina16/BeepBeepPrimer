@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import Form, RadioField, SubmitField, validators
+from wtforms import RadioField
 import wtforms as f
 from wtforms.validators import DataRequired, NumberRange, Email
 
@@ -52,5 +52,10 @@ class ObjectiveForm(FlaskForm):
 
 
 class MailForm(FlaskForm):
-    setting_mail = RadioField('setting', choices=[('6', '6 hours'), ('12', '12 hours'), ('24','24 hours')])
+    setting_mail = f.RadioField('setting', choices=[('6', '6 hours'), ('12', '12 hours'), ('24','24 hours')])
     display = ['setting']
+
+class ChallengeForm(FlaskForm):
+    run_one = f.IntegerField('run_one', validators=[DataRequired()])
+    run_two = f.IntegerField('run_two', validators=[DataRequired()])
+    display = ['run_one','run_two']

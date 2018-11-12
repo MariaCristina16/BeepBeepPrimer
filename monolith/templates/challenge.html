@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <title>Yellow Beep Beep</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/floating-labels.css') }}">
+  <link rel="shortcut icon" href="#" />
+  </head>
+<body>
+    {% if current_user.is_authenticated %}
+    <div class="container-fluid">
+         <ul class="nav nav-pills nav-stacked" role="tablist">
+          <h2>Beep Beep</h2>
+          <li><a href="/">Home</a></li>
+          <li><a href="/create_objective">Create Objective</a></li>
+          <li><a href="/objectives">List Objectives</a></li>
+          <li><a href="/create_challenge">Create Challenge</a></li>
+          <li class="active"><a href="/challenge/<id>">Compare Challenge</a></li>
+          <li><a href="/challenge">Challenges</a></li>
+          <li><a href="/statistics">Statistics</a></li>
+          <li><a href="/settingreport">Setting Report</a></li>
+          {% if current_user.is_admin %}
+          <li><a href="/users"><span class="glyphicon glyphicon-user"></span>Users list</a></li>
+          {% endif %}
+          <li><a href="/delete_user"><span class="glyphicon glyphicon-user"></span>Delete User</a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1 class="titlepage">List Challenge Run</h1><br>
+        {% for challenge in challenges: %}
+        <table>
+            <tr><td class="key">Challenge first id run: </td><td class="value"><p id="challenge_{{challenge.id}}_run_one">{{ challenge.run_one }}</p></td></tr>
+            <tr><td class="key">Challenge first id name: </td><td class="value"><p id="challenge_{{challenge.id}}_name_run_one">{{ challenge.name_run_one }}</p></td></tr>
+            <tr><td class="key">Challenge second id run: </td><td class="value"><p id="challenge_{{challenge.id}}_run_two">{{ challenge.run_two }}</p></td></tr>
+            <tr><td class="key">Challenge second id name: </td><td class="value"><p id="challenge_{{challenge.id}}_name_run_two">{{ challenge.name_run_two }}</p></td></tr>
+            <tr><td class="key">Vai alla challenge: </td><td class="value"><a href="/challenge/{{ challenge.id }}">Vai</a></td></tr>
+        </table><br>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>
