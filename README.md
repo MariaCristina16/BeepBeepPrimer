@@ -17,6 +17,9 @@ creating a file `variables.sh` in the project root.
 #!/bin/bash
 export STRAVA_CLIENT_ID=<ID>
 export STRAVA_CLIENT_SECRET=<SECRET>
+
+export MAIL_USERNAME=<USERNAME>
+export MAIL_PASSWORD=<PASSWORD>
 ```
 
 You can load the variables with `source variables.sh`.
